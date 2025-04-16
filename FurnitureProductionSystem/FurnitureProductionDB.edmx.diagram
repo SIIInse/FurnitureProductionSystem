@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4520f1c225ea43f0a34c4bc5d0ed1f91" Name="Diagram1">
+        <EntityTypeShape EntityType="FurnitureProductionDBModel.Materials" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FurnitureProductionDBModel.ProductionProcess" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="FurnitureProductionDBModel.Products" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="FurnitureProductionDBModel.ProductTypes" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FurnitureProductionDBModel.Workshops" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="FurnitureProductionDBModel.WorkshopTypes" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <AssociationConnector Association="FurnitureProductionDBModel.FK__Products__Materi__6EF57B66" ManuallyRouted="false" />
+        <AssociationConnector Association="FurnitureProductionDBModel.FK__Productio__Produ__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="FurnitureProductionDBModel.FK__Productio__Works__73BA3083" ManuallyRouted="false" />
+        <AssociationConnector Association="FurnitureProductionDBModel.FK__Products__Produc__6E01572D" ManuallyRouted="false" />
+        <AssociationConnector Association="FurnitureProductionDBModel.FK__Workshops__Works__6477ECF3" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

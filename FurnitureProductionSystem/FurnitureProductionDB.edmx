@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище FurnitureProductionDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Materials">
+          <Key>
+            <PropertyRef Name="MaterialID" />
+          </Key>
+          <Property Name="MaterialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaterialName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LossPercentage" Type="decimal" Precision="5" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductionProcess">
+          <Key>
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Name="ProcessID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="WorkshopID" Type="int" Nullable="false" />
+          <Property Name="ProductionTime" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Article" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="MinPartnerPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ProductTypeID" Type="int" Nullable="false" />
+          <Property Name="MaterialID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductTypes">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TypeCoefficient" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Workshops">
+          <Key>
+            <PropertyRef Name="WorkshopID" />
+          </Key>
+          <Property Name="WorkshopID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkshopName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="WorkshopTypeID" Type="int" Nullable="false" />
+          <Property Name="WorkersRequired" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkshopTypes">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Productio__Produ__72C60C4A">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="ProductionProcess" Type="Self.ProductionProcess" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="ProductionProcess">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Productio__Works__73BA3083">
+          <End Role="Workshops" Type="Self.Workshops" Multiplicity="1" />
+          <End Role="ProductionProcess" Type="Self.ProductionProcess" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workshops">
+              <PropertyRef Name="WorkshopID" />
+            </Principal>
+            <Dependent Role="ProductionProcess">
+              <PropertyRef Name="WorkshopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Materi__6EF57B66">
+          <End Role="Materials" Type="Self.Materials" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materials">
+              <PropertyRef Name="MaterialID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="MaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Produc__6E01572D">
+          <End Role="ProductTypes" Type="Self.ProductTypes" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTypes">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="ProductTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Workshops__Works__6477ECF3">
+          <End Role="WorkshopTypes" Type="Self.WorkshopTypes" Multiplicity="1" />
+          <End Role="Workshops" Type="Self.Workshops" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkshopTypes">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Workshops">
+              <PropertyRef Name="WorkshopTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище FurnitureProductionDBModelContainer">
+          <EntitySet Name="Materials" EntityType="Self.Materials" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductionProcess" EntityType="Self.ProductionProcess" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductTypes" EntityType="Self.ProductTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Workshops" EntityType="Self.Workshops" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WorkshopTypes" EntityType="Self.WorkshopTypes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Productio__Produ__72C60C4A" Association="Self.FK__Productio__Produ__72C60C4A">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductionProcess" EntitySet="ProductionProcess" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Productio__Works__73BA3083" Association="Self.FK__Productio__Works__73BA3083">
+            <End Role="Workshops" EntitySet="Workshops" />
+            <End Role="ProductionProcess" EntitySet="ProductionProcess" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Materi__6EF57B66" Association="Self.FK__Products__Materi__6EF57B66">
+            <End Role="Materials" EntitySet="Materials" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Produc__6E01572D" Association="Self.FK__Products__Produc__6E01572D">
+            <End Role="ProductTypes" EntitySet="ProductTypes" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Workshops__Works__6477ECF3" Association="Self.FK__Workshops__Works__6477ECF3">
+            <End Role="WorkshopTypes" EntitySet="WorkshopTypes" />
+            <End Role="Workshops" EntitySet="Workshops" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FurnitureProductionDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Materials">
+          <Key>
+            <PropertyRef Name="MaterialID" />
+          </Key>
+          <Property Name="MaterialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaterialName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LossPercentage" Type="Decimal" Precision="5" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Materi__6EF57B66" FromRole="Materials" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="ProductionProcess">
+          <Key>
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Name="ProcessID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="WorkshopID" Type="Int32" Nullable="false" />
+          <Property Name="ProductionTime" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Productio__Produ__72C60C4A" FromRole="ProductionProcess" ToRole="Products" />
+          <NavigationProperty Name="Workshops" Relationship="Self.FK__Productio__Works__73BA3083" FromRole="ProductionProcess" ToRole="Workshops" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Article" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MinPartnerPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ProductTypeID" Type="Int32" Nullable="false" />
+          <Property Name="MaterialID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Materials" Relationship="Self.FK__Products__Materi__6EF57B66" FromRole="Products" ToRole="Materials" />
+          <NavigationProperty Name="ProductionProcess" Relationship="Self.FK__Productio__Produ__72C60C4A" FromRole="Products" ToRole="ProductionProcess" />
+          <NavigationProperty Name="ProductTypes" Relationship="Self.FK__Products__Produc__6E01572D" FromRole="Products" ToRole="ProductTypes" />
+        </EntityType>
+        <EntityType Name="ProductTypes">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeCoefficient" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Produc__6E01572D" FromRole="ProductTypes" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Workshops">
+          <Key>
+            <PropertyRef Name="WorkshopID" />
+          </Key>
+          <Property Name="WorkshopID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkshopName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WorkshopTypeID" Type="Int32" Nullable="false" />
+          <Property Name="WorkersRequired" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductionProcess" Relationship="Self.FK__Productio__Works__73BA3083" FromRole="Workshops" ToRole="ProductionProcess" />
+          <NavigationProperty Name="WorkshopTypes" Relationship="Self.FK__Workshops__Works__6477ECF3" FromRole="Workshops" ToRole="WorkshopTypes" />
+        </EntityType>
+        <EntityType Name="WorkshopTypes">
+          <Key>
+            <PropertyRef Name="TypeID" />
+          </Key>
+          <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Workshops" Relationship="Self.FK__Workshops__Works__6477ECF3" FromRole="WorkshopTypes" ToRole="Workshops" />
+        </EntityType>
+        <Association Name="FK__Products__Materi__6EF57B66">
+          <End Role="Materials" Type="Self.Materials" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materials">
+              <PropertyRef Name="MaterialID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="MaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Productio__Produ__72C60C4A">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="ProductionProcess" Type="Self.ProductionProcess" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="ProductionProcess">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Productio__Works__73BA3083">
+          <End Role="Workshops" Type="Self.Workshops" Multiplicity="1" />
+          <End Role="ProductionProcess" Type="Self.ProductionProcess" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workshops">
+              <PropertyRef Name="WorkshopID" />
+            </Principal>
+            <Dependent Role="ProductionProcess">
+              <PropertyRef Name="WorkshopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Produc__6E01572D">
+          <End Role="ProductTypes" Type="Self.ProductTypes" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTypes">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="ProductTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Workshops__Works__6477ECF3">
+          <End Role="WorkshopTypes" Type="Self.WorkshopTypes" Multiplicity="1" />
+          <End Role="Workshops" Type="Self.Workshops" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkshopTypes">
+              <PropertyRef Name="TypeID" />
+            </Principal>
+            <Dependent Role="Workshops">
+              <PropertyRef Name="WorkshopTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FurnitureProductionDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Materials" EntityType="Self.Materials" />
+          <EntitySet Name="ProductionProcess" EntityType="Self.ProductionProcess" />
+          <EntitySet Name="Products" EntityType="Self.Products" />
+          <EntitySet Name="ProductTypes" EntityType="Self.ProductTypes" />
+          <EntitySet Name="Workshops" EntityType="Self.Workshops" />
+          <EntitySet Name="WorkshopTypes" EntityType="Self.WorkshopTypes" />
+          <AssociationSet Name="FK__Products__Materi__6EF57B66" Association="Self.FK__Products__Materi__6EF57B66">
+            <End Role="Materials" EntitySet="Materials" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Productio__Produ__72C60C4A" Association="Self.FK__Productio__Produ__72C60C4A">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductionProcess" EntitySet="ProductionProcess" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Productio__Works__73BA3083" Association="Self.FK__Productio__Works__73BA3083">
+            <End Role="Workshops" EntitySet="Workshops" />
+            <End Role="ProductionProcess" EntitySet="ProductionProcess" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Produc__6E01572D" Association="Self.FK__Products__Produc__6E01572D">
+            <End Role="ProductTypes" EntitySet="ProductTypes" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Workshops__Works__6477ECF3" Association="Self.FK__Workshops__Works__6477ECF3">
+            <End Role="WorkshopTypes" EntitySet="WorkshopTypes" />
+            <End Role="Workshops" EntitySet="Workshops" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище FurnitureProductionDBModelContainer" CdmEntityContainer="FurnitureProductionDBEntities">
+          <EntitySetMapping Name="Materials">
+            <EntityTypeMapping TypeName="FurnitureProductionDBModel.Materials">
+              <MappingFragment StoreEntitySet="Materials">
+                <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
+                <ScalarProperty Name="MaterialName" ColumnName="MaterialName" />
+                <ScalarProperty Name="LossPercentage" ColumnName="LossPercentage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductionProcess">
+            <EntityTypeMapping TypeName="FurnitureProductionDBModel.ProductionProcess">
+              <MappingFragment StoreEntitySet="ProductionProcess">
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="WorkshopID" ColumnName="WorkshopID" />
+                <ScalarProperty Name="ProductionTime" ColumnName="ProductionTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="FurnitureProductionDBModel.Products">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Article" ColumnName="Article" />
+                <ScalarProperty Name="MinPartnerPrice" ColumnName="MinPartnerPrice" />
+                <ScalarProperty Name="ProductTypeID" ColumnName="ProductTypeID" />
+                <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductTypes">
+            <EntityTypeMapping TypeName="FurnitureProductionDBModel.ProductTypes">
+              <MappingFragment StoreEntitySet="ProductTypes">
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="TypeCoefficient" ColumnName="TypeCoefficient" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Workshops">
+            <EntityTypeMapping TypeName="FurnitureProductionDBModel.Workshops">
+              <MappingFragment StoreEntitySet="Workshops">
+                <ScalarProperty Name="WorkshopID" ColumnName="WorkshopID" />
+                <ScalarProperty Name="WorkshopName" ColumnName="WorkshopName" />
+                <ScalarProperty Name="WorkshopTypeID" ColumnName="WorkshopTypeID" />
+                <ScalarProperty Name="WorkersRequired" ColumnName="WorkersRequired" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkshopTypes">
+            <EntityTypeMapping TypeName="FurnitureProductionDBModel.WorkshopTypes">
+              <MappingFragment StoreEntitySet="WorkshopTypes">
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
