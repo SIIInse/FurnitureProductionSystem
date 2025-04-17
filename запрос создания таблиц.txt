@@ -1,0 +1,246 @@
+-- Таблица типов продукции
+CREATE TABLE ProductTypes (
+    TypeID INT PRIMARY KEY IDENTITY(1,1),
+    TypeName NVARCHAR(100) NOT NULL,
+    TypeCoefficient DECIMAL(5,2) NOT NULL
+);
+
+-- Таблица материалов
+CREATE TABLE Materials (
+    MaterialID INT PRIMARY KEY IDENTITY(1,1),
+    MaterialName NVARCHAR(100) NOT NULL,
+    MaterialType NVARCHAR(50) NOT NULL,
+    PackageQuantity INT NOT NULL,
+    UnitOfMeasure NVARCHAR(20) NOT NULL,
+    Description NVARCHAR(500),
+    Cost DECIMAL(10,2) NOT NULL,
+    CurrentQuantity INT NOT NULL,
+    MinQuantity INT NOT NULL,
+    LossPercentage DECIMAL(5,2) NOT NULL
+);
+
+-- Таблица поставщиков
+CREATE TABLE Suppliers (
+    SupplierID INT PRIMARY KEY IDENTITY(1,1),
+    SupplierType NVARCHAR(50) NOT NULL,
+    CompanyName NVARCHAR(100) NOT NULL,
+    INN NVARCHAR(20) NOT NULL,
+    LegalAddress NVARCHAR(200) NOT NULL,
+    DirectorName NVARCHAR(100) NOT NULL,
+    Phone NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(50) NOT NULL
+);
+
+-- Таблица типов цехов
+CREATE TABLE WorkshopTypes (
+    TypeID INT PRIMARY KEY IDENTITY(1,1),
+    TypeName NVARCHAR(50) NOT NULL
+);
+
+-- Таблица цехов
+CREATE TABLE Workshops (
+    WorkshopID INT PRIMARY KEY IDENTITY(1,1),
+    WorkshopName NVARCHAR(100) NOT NULL,
+    WorkshopTypeID INT NOT NULL,
+    WorkersRequired INT NOT NULL,
+    FOREIGN KEY (WorkshopTypeID) REFERENCES WorkshopTypes(TypeID)
+);
+
+-- Таблица продукции
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY IDENTITY(1,1),
+    ProductTypeID INT NOT NULL,
+    Name NVARCHAR(100) NOT NULL,
+    Article NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(500),
+    MinPartnerPrice DECIMAL(10,2) NOT NULL,
+    PackageLength DECIMAL(5,2) NOT NULL,
+    PackageWidth DECIMAL(5,2) NOT NULL,
+    PackageHeight DECIMAL(5,2) NOT NULL,
+    NetWeight DECIMAL(5,2) NOT NULL,
+    GrossWeight DECIMAL(5,2) NOT NULL,
+    ProductionTime DECIMAL(5,2) NOT NULL,
+    CostPrice DECIMAL(10,2) NOT NULL,
+    WorkshopID INT NOT NULL,
+    WorkersRequired INT NOT NULL,
+    MaterialID INT NOT NULL,
+    FOREIGN KEY (ProductTypeID) REFERENCES ProductTypes(TypeID),
+    FOREIGN KEY (WorkshopID) REFERENCES Workshops(WorkshopID),
+    FOREIGN KEY (MaterialID) REFERENCES Materials(MaterialID)
+);
+
+-- Таблица партнеров
+CREATE TABLE Partners (
+    PartnerID INT PRIMARY KEY IDENTITY(1,1),
+    PartnerType NVARCHAR(50) NOT NULL,
+    CompanyName NVARCHAR(100) NOT NULL,
+    LegalAddress NVARCHAR(200) NOT NULL,
+    INN NVARCHAR(20) NOT NULL,
+    DirectorName NVARCHAR(100) NOT NULL,
+    Phone NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(50) NOT NULL,
+    Logo VARBINARY(MAX),
+    CurrentRating INT NOT NULL
+);
+
+-- Таблица сотрудников
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY IDENTITY(1,1),
+    FullName NVARCHAR(100) NOT NULL,
+    BirthDate DATE NOT NULL,
+    PassportData NVARCHAR(100) NOT NULL,
+    BankDetails NVARCHAR(100) NOT NULL,
+    FamilyStatus NVARCHAR(50),
+    HealthStatus NVARCHAR(100),
+    AccessCardNumber NVARCHAR(20) UNIQUE NOT NULL
+);
+
+-- Таблица заявок
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY IDENTITY(1,1),
+    PartnerID INT NOT NULL,
+    ManagerID INT NOT NULL,
+    OrderDate DATETIME NOT NULL,
+    Status NVARCHAR(20) NOT NULL,
+    PrepaymentReceived BIT DEFAULT 0,
+    PrepaymentDate DATETIME,
+    FullPaymentReceived BIT DEFAULT 0,
+    FullPaymentDate DATETIME,
+    DeliveryAddress NVARCHAR(200),
+    DeliveryType NVARCHAR(20),
+    CompletionDate DATETIME,
+    FOREIGN KEY (PartnerID) REFERENCES Partners(PartnerID),
+    FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID)
+);
+
+-- Таблица производственных процессов
+CREATE TABLE ProductionProcesses (
+    ProcessID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT NOT NULL,
+    WorkshopID INT NOT NULL,
+    ProductionTime DECIMAL(5,2) NOT NULL,
+    RequiredWorkers INT NOT NULL,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (WorkshopID) REFERENCES Workshops(WorkshopID)
+);
+
+-- Таблица истории поставок материалов
+CREATE TABLE MaterialSupplies (
+    SupplyID INT PRIMARY KEY IDENTITY(1,1),
+    SupplierID INT NOT NULL,
+    MaterialID INT NOT NULL,
+    SupplyDate DATETIME NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID),
+    FOREIGN KEY (MaterialID) REFERENCES Materials(MaterialID)
+);
+
+-- Таблица истории цен продукции
+CREATE TABLE ProductPriceHistory (
+    HistoryID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT NOT NULL,
+    ChangeDate DATETIME NOT NULL,
+    OldPrice DECIMAL(10,2) NOT NULL,
+    NewPrice DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+-- Таблица истории рейтингов партнеров
+CREATE TABLE PartnerRatingHistory (
+    HistoryID INT PRIMARY KEY IDENTITY(1,1),
+    PartnerID INT NOT NULL,
+    ChangeDate DATETIME NOT NULL,
+    OldRating INT NOT NULL,
+    NewRating INT NOT NULL,
+    Reason NVARCHAR(200) NOT NULL,
+    FOREIGN KEY (PartnerID) REFERENCES Partners(PartnerID)
+);
+
+-- Таблица точек продаж партнеров
+CREATE TABLE PartnerSalesPoints (
+    PointID INT PRIMARY KEY IDENTITY(1,1),
+    PartnerID INT NOT NULL,
+    PointName NVARCHAR(100) NOT NULL,
+    Address NVARCHAR(200) NOT NULL,
+    PointType NVARCHAR(50) NOT NULL,
+    FOREIGN KEY (PartnerID) REFERENCES Partners(PartnerID)
+);
+
+-- Таблица допусков сотрудников
+CREATE TABLE EmployeePermissions (
+    PermissionID INT PRIMARY KEY IDENTITY(1,1),
+    EmployeeID INT NOT NULL,
+    WorkshopID INT NOT NULL,
+    EquipmentType NVARCHAR(100) NOT NULL,
+    PermissionGranted BIT NOT NULL,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
+    FOREIGN KEY (WorkshopID) REFERENCES Workshops(WorkshopID)
+);
+
+-- Таблица перемещений сотрудников
+CREATE TABLE EmployeeMovements (
+    MovementID INT PRIMARY KEY IDENTITY(1,1),
+    EmployeeID INT NOT NULL,
+    CheckInTime DATETIME NOT NULL,
+    CheckOutTime DATETIME,
+    WorkshopID INT,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
+    FOREIGN KEY (WorkshopID) REFERENCES Workshops(WorkshopID)
+);
+
+-- Таблица позиций заявок
+CREATE TABLE OrderItems (
+    OrderItemID INT PRIMARY KEY IDENTITY(1,1),
+    OrderID INT NOT NULL,
+    ProductID INT NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10,2) NOT NULL,
+    ProductionStartDate DATETIME,
+    ProductionEndDate DATETIME,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+-- Таблица складских операций с материалами
+CREATE TABLE MaterialTransactions (
+    TransactionID INT PRIMARY KEY IDENTITY(1,1),
+    MaterialID INT NOT NULL,
+    TransactionType NVARCHAR(20) NOT NULL,
+    Quantity INT NOT NULL,
+    TransactionDate DATETIME NOT NULL,
+    OrderID INT,
+    WorkshopID INT,
+    FOREIGN KEY (MaterialID) REFERENCES Materials(MaterialID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (WorkshopID) REFERENCES Workshops(WorkshopID)
+);
+
+-- Таблица складских операций с продукцией
+CREATE TABLE ProductTransactions (
+    TransactionID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT NOT NULL,
+    TransactionType NVARCHAR(20) NOT NULL,
+    Quantity INT NOT NULL,
+    TransactionDate DATETIME NOT NULL,
+    OrderID INT,
+    WorkshopID INT,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (WorkshopID) REFERENCES Workshops(WorkshopID)
+);
+
+-- Таблица истории продаж
+CREATE TABLE SalesHistory (
+    SaleID INT PRIMARY KEY IDENTITY(1,1),
+    PartnerID INT NOT NULL,
+    ProductID INT NOT NULL,
+    SaleDate DATETIME NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10,2) NOT NULL,
+    Discount DECIMAL(5,2) NOT NULL,
+    OrderID INT NOT NULL,
+    FOREIGN KEY (PartnerID) REFERENCES Partners(PartnerID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
